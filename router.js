@@ -29,6 +29,10 @@ router.use("/testimonials", testimonialRoutes);
 const userRoutes = require("./components/users/routers/user_routes.js");
 router.use("/users", userRoutes);
 
+// Partner Routes
+const partnerRoutes = require("./components/partners/routers/partner_routes.js");   
+router.use("/partners", partnerRoutes);
+
 //Subscriber Routes
 const subscriberRoutes = require("./components/subscriber/routers/subscriber_routes.js");
 router.use("/subscribers", subscriberRoutes);
