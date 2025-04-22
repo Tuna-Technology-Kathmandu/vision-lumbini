@@ -37,4 +37,8 @@ router.use("/partners", partnerRoutes);
 const subscriberRoutes = require("./components/subscriber/routers/subscriber_routes.js");
 router.use("/subscribers", subscriberRoutes);
 
+// Company Information Routes
+const companyInfoRoutes = require("./components/company_information/routers/company_info_routes.js");
+router.use("/company-info", companyInfoRoutes);
+
 module.exports = router;
