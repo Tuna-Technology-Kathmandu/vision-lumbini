@@ -1,22 +1,43 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const categorySchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
+const categorySchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+    },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    parent: {
+      type: Schema.Types.ObjectId,
+      ref: "Category",
+      default: null,
+    },
+    description: {
+      type: String,
+      trim: true,
+    },
   },
-  slug: {
-    type: String,
-    unique: true,
-    lowercase: true,
-    trim: true,
-  },
-  sub_category: {
-    type: String,
-    trim: true,
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
-}, { timestamps: true });
+);
 
-module.exports = mongoose.model("Category", categorySchema);
+// Virtual to populate subcategories
+categorySchema.virtual("subcategories", {
+  ref: "Category",
+  localField: "_id",
+  foreignField: "parent",
+});
+
+const Category = mongoose.model("Category", categorySchema);
+
+module.exports = Category;

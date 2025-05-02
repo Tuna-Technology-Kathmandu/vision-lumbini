@@ -11,14 +11,14 @@ const createCompanyInfo = async (req, res) => {
       return res.status(400).json({ message: error.details[0].message });
     }
 
-    const image = req.file?.path;
-    if (!image) {
-      return res.status(400).json({ message: "Image upload is required." });
+    const images = req.files?.map(file => file.path);
+    if (!images || images.length === 0) {
+      return res.status(400).json({ message: "At least one image is required." });
     }
 
     const newCompanyInfo = new CompanyInformation({
       ...value,
-      image,
+      image: images,
     });
 
     await newCompanyInfo.save();

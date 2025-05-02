@@ -16,11 +16,17 @@ const createCategory = async (req, res) => {
 
     const slug = slugify(value.name, { lower: true });
 
-    const newCategory = new Category({ ...value, slug });
+    const categoryData = {
+      name: value.name,
+      slug,
+      parent: value.parent || null, // parent is optional
+    };
+
+    const newCategory = new Category(categoryData);
     await newCategory.save();
 
     return res.status(201).json({
-      message: "Category created",
+      message: "Category created successfully",
       category: newCategory,
     });
   } catch (error) {

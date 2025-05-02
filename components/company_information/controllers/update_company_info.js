@@ -17,11 +17,16 @@ const updateCompanyInfo = async (req, res) => {
       return res.status(404).json({ message: "Company Information not found" });
     }
 
-    Object.assign(companyInfo, {
+    const updatedData = {
       ...value,
-      ...(req.file?.path && { image: req.file.path }) 
-    });
+    };
 
+    const images = req.files?.map(file => file.path);
+    if (images && images.length > 0) {
+      updatedData.image = images;
+    }
+
+    Object.assign(companyInfo, updatedData);
     await companyInfo.save();
 
     return res.status(200).json({
@@ -36,4 +41,4 @@ const updateCompanyInfo = async (req, res) => {
   }
 };
 
-module.exports = {updateCompanyInfo, upload};
+module.exports = { updateCompanyInfo, upload };

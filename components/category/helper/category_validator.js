@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const JoiObjectId = require("joi-objectid")(Joi);
 
 const categoryValidation = Joi.object({
   name: Joi.string()
@@ -11,13 +12,10 @@ const categoryValidation = Joi.object({
       "string.max": "Category name must not exceed 50 characters",
     }),
 
-  sub_category: Joi.string()
-    .min(2)
-    .max(50)
+  parent: JoiObjectId()
     .optional()
     .messages({
-      "string.min": "Sub-category must be at least 2 characters",
-      "string.max": "Sub-category must not exceed 50 characters",
+      "string.pattern.name": "Invalid parent category ID",
     }),
 });
 
