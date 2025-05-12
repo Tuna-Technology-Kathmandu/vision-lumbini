@@ -5,8 +5,7 @@ const listAllCategories = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
-    const sortOrder = req.query.sort === "asc" ? 1 : -1; 
-
+    const sortOrder = req.query.sort === "asc" ? 1 : -1;
 
     const search = req.query.search || "";
 
@@ -14,12 +13,15 @@ const listAllCategories = async (req, res) => {
       ? { name: { $regex: search, $options: "i" } }
       : {};
 
-    const categories = await Category.find(searchQuery)
+    const categories = await Category.find({
+      ...searchQuery,
+      parent: null,
+    })
       .sort({ createdAt: sortOrder })
       .skip(skip)
       .limit(limit)
+      .populate("subcategories")
       .lean();
-
 
     const totalCategories = await Category.countDocuments(searchQuery);
 

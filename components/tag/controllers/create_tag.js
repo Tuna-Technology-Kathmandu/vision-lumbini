@@ -2,7 +2,6 @@ const Tag = require("../models/tag_model");
 const slugify = require("slugify");
 const tagValidator = require("../helper/tag_validator");
 
-// Create a tag
 const createTag = async (req, res) => {
   try {
     const { error, value } = tagValidator.validate(req.body);

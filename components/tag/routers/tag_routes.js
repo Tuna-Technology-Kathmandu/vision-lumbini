@@ -11,8 +11,8 @@ const updateTag = require("../controllers/update_tag");
 const deleteTag = require("../controllers/delete_tag");
 
 router.post("/", verifyToken, checkRole("admin", "editor"), createTag);
-router.get("/", verifyToken, checkRole("admin", "editor"), listAllTags);
-router.get("/:id", verifyToken, checkRole("admin", "editor"), getSingleTag);
+router.get("/", listAllTags);
+router.get("/:id", getSingleTag);
 router.put("/:id", verifyToken, checkRole("admin", "editor"), updateTag);
 router.delete("/:id", verifyToken, checkRole("admin", "editor"), deleteTag);
 
