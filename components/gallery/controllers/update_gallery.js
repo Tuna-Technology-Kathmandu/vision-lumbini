@@ -5,7 +5,10 @@ const updateGallery = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const { error, value } = galleryValidation.validate(req.body);
+    const { error, value } = galleryValidation.validate(req.body, {
+      allowUnknown: true,
+      stripUnknown: true,
+    });
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
@@ -15,19 +18,12 @@ const updateGallery = async (req, res) => {
       return res.status(404).json({ message: "Gallery not found" });
     }
 
-    const updatedData = {};
+    const image = req.file?.path;
 
-    if (value && value.title) {
-      updatedData.title = value.title;
-    }
-
-    const image = req.file?.path; 
-
-    if (image) {
-      updatedData.image = image; 
-    }
-
-    Object.assign(gallery, updatedData);
+    if (value.title) gallery.title = value.title;
+    if (value.status) gallery.status = value.status;
+    if (value.video_url) gallery.video_url = value.video_url;
+    if (image) gallery.image = image;
 
     await gallery.save();
 

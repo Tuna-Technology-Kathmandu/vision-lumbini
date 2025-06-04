@@ -8,30 +8,42 @@ const createGallery = async (req, res) => {
   try {
     const { error, value } = galleryValidation.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+      return res.status(400).json({
+        message: `Validation Error: ${error.details[0].message}`,
+      });
     }
 
-    const image = req.file?.path;  
-
-    if (!image) {
-      return res.status(400).json({ message: "Image is required." });
+    const existing = await Gallery.findOne({ title: value.title });
+    if (existing) {
+      return res.status(409).json({
+        message: "A gallery with this title already exists. Please choose a different title.",
+      });
     }
+
+    const image = req.file?.path || null;
 
     const newGallery = new Gallery({
       ...value,
-      image: image,   
+      image,
     });
 
     await newGallery.save();
 
     return res.status(201).json({
-      message: "Gallery created successfully",
+      message: "Gallery created successfully.",
       gallery: newGallery,
     });
   } catch (err) {
     console.error("Create Gallery Error:", err);
+
+    if (err.code === 11000 && err.keyPattern?.title) {
+      return res.status(409).json({
+        message: "Gallery title must be unique. This title already exists.",
+      });
+    }
+
     return res.status(500).json({
-      message: "Server error while creating gallery",
+      message: "Internal Server Error: Unable to create gallery.",
     });
   }
 };

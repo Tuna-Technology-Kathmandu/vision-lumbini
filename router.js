@@ -57,4 +57,8 @@ router.use("/reports", reportRoutes);
 const teamRoutes = require("./components/teams/routers/team_routes.js");
 router.use("/team", teamRoutes);
 
+// Gallery Routes
+const galleryRoutes = require("./components/gallery/routers/gallery_routes.js");    
+router.use("/gallery", galleryRoutes);
+
 module.exports = router;
