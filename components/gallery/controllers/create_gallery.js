@@ -22,6 +22,34 @@ const createGallery = async (req, res) => {
 
     const image = req.file?.path || null;
 
+    if (value.type === "video") {
+      if (!value.video_url || value.video_url.trim() === "") {
+        return res.status(400).json({
+          message: "Validation Error: 'video_url' is required when type is 'video'.",
+        });
+      }
+
+      if (image) {
+        return res.status(400).json({
+          message: "Validation Error: Image upload is not allowed when type is 'video'.",
+        });
+      }
+    }
+
+    if (value.type === "image") {
+      if (!image) {
+        return res.status(400).json({
+          message: "Validation Error: Image file is required when type is 'image'.",
+        });
+      }
+
+      if (value.video_url && value.video_url.trim() !== "") {
+        return res.status(400).json({
+          message: "Validation Error: 'video_url' should be empty when type is 'image'.",
+        });
+      }
+    }
+
     const newGallery = new Gallery({
       ...value,
       image,

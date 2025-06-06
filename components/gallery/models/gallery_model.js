@@ -8,6 +8,11 @@ const gallerySchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
+    type: {
+      type: String,
+      enum: ["image", "video"],
+      required: [true, "Type is required"],
+    },
     image: {
       type: String,
       trim: true,

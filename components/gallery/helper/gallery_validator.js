@@ -6,6 +6,10 @@ const galleryValidation = Joi.object({
     "string.min": "Title must be at least 5 characters",
     "string.max": "Title must not exceed 100 characters",
   }),
+  type: Joi.string().valid("image", "video").required().messages({
+    "any.only": "Type must be either 'image' or 'video'",
+    "string.empty": "Type is required",
+  }),
   video_url: Joi.string()
     .uri()
     .pattern(/(youtube\.com\/.*v=|youtu\.be\/)/)

@@ -9,9 +9,17 @@ const listAllGallery = async (req, res) => {
     const sortOrder = req.query.sort === "asc" ? 1 : -1;
 
     const status = req.query.status || "";
-    const searchQuery = status
-      ? { status: { $regex: status, $options: "i" } }
-      : {};
+    const type = req.query.type || "";
+
+    const searchQuery = {};
+
+    if (status) {
+      searchQuery.status = { $regex: status, $options: "i" };
+    }
+
+    if (type) {
+      searchQuery.type = { $regex: type, $options: "i" };
+    }
 
     const galleries = await Gallery.find(searchQuery)
       .sort({ createdAt: sortOrder })
