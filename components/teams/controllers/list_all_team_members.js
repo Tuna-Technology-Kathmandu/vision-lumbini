@@ -9,7 +9,7 @@ const listAllTeamMembers = async (req, res) => {
 
     const search = req.query.search || "";
     const searchQuery = search
-      ? { fullname: { $regex: search, $options: "i" } }
+      ? { name: { $regex: search, $options: "i" } }
       : {};
 
     const members = await Team.find(searchQuery)
