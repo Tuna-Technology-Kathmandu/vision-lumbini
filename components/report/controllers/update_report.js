@@ -15,13 +15,16 @@ const updateReport = async (req, res) => {
       return res.status(404).json({ message: "Report not found" });
     }
 
-    report.set({ ...value });
+    const fileUrl = req.file?.path;
+    if (fileUrl) {
+      value.file = fileUrl;
+    }
 
-    report.status = 'pending'
+    report.set({ ...value });
     await report.save();
 
     return res.status(200).json({
-      message: "Report updated. Awaiting admin verification.",
+      message: "Report updated successfully.",
       report,
     });
   } catch (error) {
